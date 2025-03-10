@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     List<Photo> findByPostId(Integer postId);
 
+    Photo findByUserId(Integer userId);
+
     void deleteByPostId(Integer postId);
 }

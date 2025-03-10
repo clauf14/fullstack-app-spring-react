@@ -34,7 +34,7 @@ public class UserAuthenticationProvider {
 
     public String createToken(UserDto user) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600000); // 1 hour
+        Date validity = new Date(now.getTime() + 36000000); // 1 hour
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
@@ -43,6 +43,7 @@ public class UserAuthenticationProvider {
                 .withExpiresAt(validity)
                 .withClaim("firstName", user.getFirstName())
                 .withClaim("lastName", user.getLastName())
+                .withClaim("id", user.getId())
                 .sign(algorithm);
     }
 

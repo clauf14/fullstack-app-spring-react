@@ -18,7 +18,16 @@ public class Photo {
 
     @Column(name = "post_id")
     private Integer postId;
+    @Column(name = "user_id")
+    private Integer userId;
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getPhotoId() {
         return photoId;

@@ -1,8 +1,6 @@
-// hoc/withAuth.js
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAuthenticationToken } from './axios_helper';
+import { getAuthenticationToken, removeAuthenticationToken } from './axios_helper';
 
 const withAuth = (WrappedComponent) => {
     return (props) => {
@@ -11,10 +9,10 @@ const withAuth = (WrappedComponent) => {
         useEffect(() => {
             const authToken = localStorage.getItem('auth_token');
 
-            if (!authToken || getAuthenticationToken() === null && getAuthenticationToken() === "null") {
-                router.push('/login');
+            if (!authToken || getAuthenticationToken() === null || getAuthenticationToken() === "null") {
+                removeAuthenticationToken();
                 localStorage.removeItem("loginInfo");
-                localStorage.removeItem("auth_token");
+                router.push('/login');
             }
         }, [router]);
 

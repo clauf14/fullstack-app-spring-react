@@ -187,7 +187,7 @@ export default withAuth(function Page({ params }) {
                         </div>
                         <p className="text-xl font-semibold mb-4">{`Email: ${user.email}`}</p>
                         <p className="text-lg font-semibold mb-4">{`Phone number: ${user.phoneNumber}`}</p>
-                        <a href={`/users/${user.id}/posts`} className="text-md underline">See more posts from this user</a>
+                        <a href={`/users/${user.id}`} className="text-md underline">See more posts from this user</a>
                         <Location post={post} />
                     </div>
                 </div>

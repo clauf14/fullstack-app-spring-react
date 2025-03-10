@@ -23,14 +23,34 @@ public class PhotoController {
     @Transactional
     public ResponseEntity<byte[]> displayImage(@PathVariable("photoId") Integer id) {
         Photo photo = photoService.viewById(id);
-        byte[] imageBytes = photo.getImage();
 
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        if (photo.getImage() == null || photo.getImage().length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(photo.getImage());
+    }
+
+    @GetMapping("/display/{userId}/{photoId}")
+    @Transactional
+    public ResponseEntity<byte[]> displayProfilePicture(@PathVariable("photoId") Integer id,
+                                               @PathVariable("photoId") Integer userId) {
+        Photo photo = photoService.viewByUserId(id);
+
+        if (photo.getImage() == null || photo.getImage().length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(photo.getImage());
     }
 
     @GetMapping("/display/{postId}/{photoId}")
     @Transactional
-    public ResponseEntity<byte[]> displayImageByPhotoId(@PathVariable("postId") Integer postId,
+    public ResponseEntity<byte[]> displayImageByPostId(@PathVariable("postId") Integer postId,
                                                         @PathVariable("photoId") Integer photoId) {
         List<Photo> photos = photoService.viewByPostId(postId);
         Optional<Photo> optionalPhoto = photos.stream().filter(photo -> photo.getPhotoId().equals(photoId)).findFirst();
@@ -58,7 +78,7 @@ public class PhotoController {
     }
 
     // add image - post
-    @PostMapping("/add")
+    @PostMapping("/add/post")
     public void addImagePost(@RequestParam("image") MultipartFile file
             , @RequestParam("postId") Integer postId) throws IOException {
         byte[] bytes = file.getBytes();
@@ -66,6 +86,18 @@ public class PhotoController {
         Photo photo = new Photo();
         photo.setImage(bytes);
         photo.setPostId(postId);
+        photoService.create(photo);
+    }
+
+    // add image - user
+    @PostMapping("/add/user")
+    public void addImageUser(@RequestParam("image") MultipartFile file
+            , @RequestParam("userId") Integer userId) throws IOException {
+        byte[] bytes = file.getBytes();
+
+        Photo photo = new Photo();
+        photo.setImage(bytes);
+        photo.setUserId(userId);
         photoService.create(photo);
     }
 

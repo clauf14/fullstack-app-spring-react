@@ -12,7 +12,7 @@ export default function Home() {
     if (token) {
       // Optionally, you could add more checks here to validate the token
       setIsAuthenticated(true);
-    }
+    } 
   }, []);
 
   return (

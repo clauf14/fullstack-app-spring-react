@@ -57,7 +57,7 @@ export default function EditPostForm( {post, photos} ) {
           formData.append('image', file);
           formData.append('postId', postId);
 
-          const photoResponse = await fetch('http://localhost:8080/photos/add', {
+          const photoResponse = await fetch(`http://localhost:8080/photos/add/post`, {
             method: 'POST',
             body: formData
           });
@@ -121,10 +121,10 @@ export default function EditPostForm( {post, photos} ) {
 
     return (
     <>
-        <a href={`/users/${post.userId}/posts`}>
-        <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 mt-5 mx-28 px-4">
-            Go back
-        </button>
+        <a href={`/users/${post.userId}`}>
+          <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 mt-5 mx-28 px-4">
+              Go back
+          </button>
         </a>
         {isLoading ? (
             <Loading />

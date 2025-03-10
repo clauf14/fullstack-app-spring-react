@@ -28,20 +28,8 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET, "/photos/display/{photoId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add/post").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint))
-//                .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests((requests) -> requests
-//                        .anyRequest().permitAll());
-//
-//        return http.build();
-//    }
 }

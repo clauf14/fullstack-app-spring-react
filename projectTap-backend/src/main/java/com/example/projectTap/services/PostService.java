@@ -42,8 +42,8 @@ public class PostService {
 
     @Transactional
     public String delete(Integer id) {
-        postRepository.deleteById(id);
         photoRepository.deleteByPostId(id);
+        postRepository.deleteById(id);
         return "deleted";
     }
 

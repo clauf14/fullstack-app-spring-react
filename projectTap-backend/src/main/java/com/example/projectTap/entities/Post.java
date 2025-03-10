@@ -13,6 +13,9 @@ public class Post {
     @Column(name = "post_id")
     private Integer postId;
 
+    @Column(name = "photo_id")
+    private Integer photoId;
+
     private String title;
     private String description;
     private Double price;

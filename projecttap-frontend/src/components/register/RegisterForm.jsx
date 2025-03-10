@@ -16,8 +16,6 @@ export default function Form(){
     const [message, setMessage] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('')
 
-    const router = useRouter();
-
     const handleSubmit = (e) => {
       e.preventDefault();
       request(
@@ -33,11 +31,8 @@ export default function Form(){
         }
       ).then((response)=>{
         console.log("New user added to backend!")
-     
         setAuthenticationToken(response.data.token)
-        setMessage(`User added to the database, click here to sign in!`)
-        alert("Your account has been created successfully!")
-        router.push("/login")
+        setMessage(`User registered successfully, click here to sign in!`)
       }).catch((error) => {
         console.error("Error adding user:", error);
         setMessage("User already exists. Please try another username.");
@@ -154,7 +149,7 @@ export default function Form(){
                       type="password"
                       autoComplete="current-password"
                       required
-                      placeholder="Enter your first name" value={password} onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 text-left shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -170,7 +165,7 @@ export default function Form(){
                 </div>
               </form>
               <div className='mt-4 flex items-center justify-center'>
-                <a className={message.includes('Error') ? "text-red-500" : "text-green-500"} href='/login'>{message}</a>
+                <a className={message.includes('exists') ? "text-red-500 font-semibold" : "text-green-500 hover:underline font-semibold"} href='/login'>{message}</a>
               </div>
     
               <p className="mt-10 text-center text-sm text-gray-500  dark:text-slate-300">
@@ -187,31 +182,4 @@ export default function Form(){
           </div>
         </>
     )
-
-    // return (
-    //     <form onSubmit={handleSubmit} className="bg-white shadow-2xl rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-    //       <div className="mb-4">
-    //         <label htmlFor="firstName" className="block text-gray-700 text-sm font-bold mb-2">First Name</label>
-    //         <input type="text" id="firstName" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-    //       </div>
-    //       <div className="mb-4">
-    //         <label htmlFor="lastName" className="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
-    //         <input type="text" id="lastName" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-    //       </div>
-    //       <div className="mb-4">
-    //         <label htmlFor="dob" className="block text-gray-700 text-sm font-bold mb-2">Username</label>
-    //         <input type="text" id="dob" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={dob} onChange={(e) => setDob(e.target.value)} />
-    //       </div>
-    //       <div className="mb-4">
-    //         <label htmlFor="dob" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-    //         <input type="mail" id="dob" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value={dob} onChange={(e) => setDob(e.target.value)} />
-    //       </div>
-    //       <div className="flex items-center justify-center">
-    //         <button type="submit" className="bg-purple-400 hover:bg-purple-700 text-white font-bold rounded-full py-2 px-4 mt-4 focus:outline-none focus:shadow-outline">Submit</button>
-    //       </div>
-    //       <div className='mt-4 flex items-center justify-center'>
-    //       <a className={message.includes('Error') ? "text-red-500" : "text-green-500"} href='http://localhost:8080/users'>{message}</a>
-    //       </div>
-    //     </form>
-    // );
   }
