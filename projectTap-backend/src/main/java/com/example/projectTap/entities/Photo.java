@@ -2,8 +2,6 @@ package com.example.projectTap.entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Blob;
-
 @Entity
 @Table(name = "photos")
 public class Photo {
