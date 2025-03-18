@@ -2,6 +2,8 @@ package com.example.projectTap.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Arrays;
+
 @Entity
 @Table(name = "photos")
 public class Photo {
@@ -16,16 +18,6 @@ public class Photo {
 
     @Column(name = "post_id")
     private Integer postId;
-    @Column(name = "user_id")
-    private Integer userId;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public Integer getPhotoId() {
         return photoId;
@@ -55,7 +47,7 @@ public class Photo {
     public String toString() {
         return "Photo{" +
                 "photoId=" + photoId +
-                ", image=" + image +
+                ", image=" + Arrays.toString(image) +
                 ", postId=" + postId +
                 '}';
     }

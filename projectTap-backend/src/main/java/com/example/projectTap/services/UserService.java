@@ -57,7 +57,7 @@ public class UserService {
         return userMapper.toUserDto(savedUser);
     }
 
-    public UserDto updateUserInfo(Integer userId, UserDto userDto) {
+    public UserDto updateUserInfo(Integer userId,Integer photoId, UserDto userDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
         User user = optionalUser.orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
@@ -67,6 +67,7 @@ public class UserService {
         user.setEmail(userDto.getEmail());
         user.setLogin(userDto.getLogin());
         user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setPhoto_id(photoId);
 
         User updatedUser = userRepository.save(user);
 

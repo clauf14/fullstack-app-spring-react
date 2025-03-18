@@ -34,6 +34,9 @@ public class User {
     @Size(max = 100)
     private String password;
 
+    @Column(name = "photo_id")
+    private Integer photo_id;
+
     @Override
     public String toString() {
         return "User{" +

@@ -1,20 +1,31 @@
 "use client"
 import { request } from "@/app/axios_helper";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import AddPost from "./AddPost";
 
 export default function Categories(){
-const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('')
   const [subcategories, setSubcategories] = useState([])
   const [selectedSubcategory, setSelectedSubcategory] = useState('')
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
   const [selectedSubcategoryName, setSelectedSubcategoryName] = useState('')
 
-  //for ai window
+  //for ai windows
   const [isOpen, setIsOpen] = useState(false)
   const [aiOn, setAiOn] = useState(false)
+  const [continueAi, setContinueAi] = useState(false)
+
+  const images = [
+    '/images/chair-ok.png',
+    '/images/set-of-cups-ok.png',
+    '/images/chair-nok.png',
+    '/images/set-of-cups-nok.png',
+  ]
 
   useEffect(() => {
     request('GET', "http://localhost:8080/category/all")
@@ -44,13 +55,20 @@ const [categories, setCategories] = useState([])
 
   const closeModal = () => {
     setIsOpen(false);
+    setContinueAi(false)
     setAiOn(false)
   };
 
   const enableAi = () => {
     setAiOn(true);
+    setContinueAi(false);
     setIsOpen(false); // Optionally close the modal after enabling AI
   };
+
+  const handleContinueAi = () => {
+    setContinueAi(true)
+    setIsOpen(false);
+  }
 
   
   const handleCategoryChange = (event) => {
@@ -81,9 +99,10 @@ const [categories, setCategories] = useState([])
         </div>
 
         {aiOn && (
-          <p className="mt-2 text-green-600 font-bold">✅ AI is now enabled! Upload some photos and let the magic happen!</p>
+          <p className="mt-2 text-green-600 font-bold">✅ AI is now enabled! Upload a photo and let the magic happen!</p>
         )}
 
+        {/* first window of ai modal */}
         {isOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg max-w-xl overflow-y-auto max-h-[80vh]">
@@ -114,6 +133,48 @@ const [categories, setCategories] = useState([])
                   </div>
                   
                   <div className="mt-4 flex gap-2">
+                    {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={enableAi}>
+                      Enable AI ✅
+                    </button> */}
+                    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleContinueAi}>
+                      Continue
+                    </button>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={closeModal}>
+                      Close ❌
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+
+          {/* second window of ai modal */}
+          {continueAi && (
+              <div className="fixed inset-0 flex items-center justify-center  bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-xl overflow-y-auto max-h-[80vh]">
+                  <h3 className="text-2xl font-bold">ReTrove Market BETA AI Feature</h3>
+                  <h2 className="text-xl font-bold">Tutorial: How to?</h2>
+                  <p className="mt-2 text-gray-600">
+                    For the detection to be as accurate as possible, try uploading a photo with your product on a plain background and in the center of the image.
+                    If not possbile, make sure that the main object you are interested in selling takes up the most space in the picture, like in this examples bellow.
+                  </p>
+                  
+                  <div className="overflow-hidden flex justify-center items-center px-10 bg-black w-full h-80">
+                    <Slider className="w-96 h-80 flex items-center justify-center">
+                      {images.map((img, index) => (
+                        <div key={index} className="flex justify-center items-center">
+                          <img
+                            src={img}
+                            alt={`Preview ${index}`}
+                            className="rounded-lg shadow-lg object-contain max-w-full max-h-full"
+                          />
+                        </div>
+                      ))}
+                    </Slider>
+                  </div>
+
+                  
+                  <div className="mt-4 flex gap-2">
                     <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={enableAi}>
                       Enable AI ✅
                     </button>
@@ -134,9 +195,9 @@ const [categories, setCategories] = useState([])
               required
               className="block w-full p-2 mb-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-600"
             >
-              <option value="">Select a category</option>
+              <option required value="">Select a category</option>
               {categories.map((category) => (
-                <option key={"key" + category.categoryId} value={category.categoryid}>
+                <option required key={"key" + category.categoryId} value={category.categoryid}>
                   {category.title}
                 </option>
               ))}
@@ -149,9 +210,9 @@ const [categories, setCategories] = useState([])
                   required
                   className="block w-full p-2 mb-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-600"
                 >
-                  <option value="">Select a subcategory</option>
+                  <option required value="">Select a subcategory</option>
                   {subcategories.map((subcategory) => (
-                    <option key={subcategory.subcategoryId} value={subcategory.subcategoryid}>
+                    <option required key={subcategory.subcategoryId} value={subcategory.subcategoryid}>
                       {subcategory.title}
                     </option>
                   ))}
@@ -160,7 +221,7 @@ const [categories, setCategories] = useState([])
             )}
           </div>
         )}
-        <AddPost selectedSubcategory={selectedSubcategory} aiOn={aiOn}/>
+        <AddPost setSelectedCategory={setSelectedCategory} setSelectedSubcategory={setSelectedSubcategory} setSelectedCategoryName={setSelectedCategoryName} setSelectedSubcategoryName={setSelectedSubcategoryName} selectedSubcategory={selectedSubcategory} aiOn={aiOn} setAiOn={setAiOn}/>
       </>
     );
     

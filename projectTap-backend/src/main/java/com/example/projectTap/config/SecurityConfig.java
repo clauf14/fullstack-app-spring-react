@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET, "/photos/display/{photoId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add/post").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add/post", "/photos/add").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }

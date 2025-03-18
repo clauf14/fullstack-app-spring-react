@@ -29,10 +29,6 @@ public class PhotoService {
                 .orElseThrow(() -> new EntityNotFoundException("Photo not found with ID: " + id));
     }
 
-    public Photo viewByUserId(Integer userId){
-        return photoRepository.findByUserId(userId);
-    }
-
     public List<Photo> viewByPostId(Integer postId){
         return photoRepository.findByPostId(postId);
     }

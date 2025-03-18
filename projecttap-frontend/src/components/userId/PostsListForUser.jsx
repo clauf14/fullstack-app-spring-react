@@ -29,7 +29,9 @@ export default function PostsListForUser({ posts, isUserMatched }) {
         <div className="min-h-screen">
             <div>
                 {isLoading ? (
-                    <Loading />
+                    <div className="my-36">
+                        <Loading />
+                    </div>
                 ) : posts.length !== 0 ? (
                     posts.map((post) => {
                         return (

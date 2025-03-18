@@ -33,9 +33,11 @@ public class AuthenticationController {
         return userRepository.findById(userId);
     }
 
-    @PutMapping("/users/edit/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("userId") Integer userId, @RequestBody @Valid UserDto userDto) {
-        UserDto updatedUser = userService.updateUserInfo(userId, userDto);
+    @PutMapping("/users/edit/{userId}/{photoId}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable("userId") Integer userId,
+                                              @PathVariable("photoId") Integer photoId,
+                                              @RequestBody @Valid UserDto userDto) {
+        UserDto updatedUser = userService.updateUserInfo(userId, photoId,userDto);
         return ResponseEntity.ok(updatedUser);
     }
 

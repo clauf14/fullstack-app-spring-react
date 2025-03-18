@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import Loading from "@/components/Loading";
 
 import withAuth from "@/app/withAuth";
+import ShowProfilePicture from "@/components/ShowProfilePicture";
 
 export default withAuth(function Page({ params }) {
     const [post, setPost] = useState({});
@@ -179,10 +180,7 @@ export default withAuth(function Page({ params }) {
                     <div className="bg-white rounded shadow-lg px-5 py-5 mb-10">
                         <h1 className="text-2xl font-semibold mb-4">Seller</h1>
                         <div className="flex items-center space-x-4 mb-4">
-                            <div className="h-14 w-14 rounded-full bg-gray-300">
-                                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                                    className="h-full w-full rounded-full object-cover" alt="Profile Picture" />
-                            </div>
+                            <ShowProfilePicture user={user}/>
                             <p className="text-xl font-bold">{user.firstName} {user.lastName}</p>
                         </div>
                         <p className="text-xl font-semibold mb-4">{`Email: ${user.email}`}</p>

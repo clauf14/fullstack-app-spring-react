@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,21 +24,6 @@ public class PhotoController {
     @Transactional
     public ResponseEntity<byte[]> displayImage(@PathVariable("photoId") Integer id) {
         Photo photo = photoService.viewById(id);
-
-        if (photo.getImage() == null || photo.getImage().length == 0) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(photo.getImage());
-    }
-
-    @GetMapping("/display/{userId}/{photoId}")
-    @Transactional
-    public ResponseEntity<byte[]> displayProfilePicture(@PathVariable("photoId") Integer id,
-                                               @PathVariable("photoId") Integer userId) {
-        Photo photo = photoService.viewByUserId(id);
 
         if (photo.getImage() == null || photo.getImage().length == 0) {
             return ResponseEntity.notFound().build();
@@ -88,17 +74,15 @@ public class PhotoController {
         photo.setPostId(postId);
         photoService.create(photo);
     }
-
-    // add image - user
-    @PostMapping("/add/user")
-    public void addImageUser(@RequestParam("image") MultipartFile file
-            , @RequestParam("userId") Integer userId) throws IOException {
+    //add image with return of newly created photo id
+    @PostMapping("/add")
+    public ResponseEntity<Integer> addImage(@RequestParam("image") MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
-
         Photo photo = new Photo();
         photo.setImage(bytes);
-        photo.setUserId(userId);
-        photoService.create(photo);
+        Photo savedPhoto = photoService.create(photo);
+        System.out.println(savedPhoto.getPhotoId());
+        return ResponseEntity.ok().body(savedPhoto.getPhotoId());
     }
 
     @DeleteMapping("/delete/{photoId}")

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { request } from "@/app/axios_helper";
 import Header from "../Header";
 import Loading from "../Loading";
+import PreviewAndAddImages from "@/components/PreviewAndAddImages";
 
 export default function EditUser( {user} ){
     const [firstName, setFirstName] = useState("");
@@ -9,6 +10,12 @@ export default function EditUser( {user} ){
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("")
+    
+    //for file
+    const [files, setFiles] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
+
+    const[addNewProfilePicture, setAddNewProfilePicture] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -23,29 +30,49 @@ export default function EditUser( {user} ){
         }
       }, [user]);
 
-    const handleSubmit = (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        request("PUT", `/users/edit/${user.id}`, {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          username: username,
-          login: username,
-          phoneNumber: phoneNumber,
-        })
-          .then((response) => {
-            alert("User updated successfully!")
+    
+        try {
+            let photoId = user.photo_id; // Default to current photo ID if no new photo is uploaded
+    
+            if (addNewProfilePicture && files != null) {
+                const formData = new FormData();
+                formData.append('image', files[0]);
+    
+                const photoResponse = await fetch("http://localhost:8080/photos/add", {
+                    method: "POST",
+                    body: formData
+                });
+    
+                if (!photoResponse.ok) {
+                    throw new Error("Failed to upload photo");
+                }
+    
+                const result = await photoResponse.json();
+                console.log("Photo Response:", result);
+                photoId = result; // Update photoId with the new uploaded photo
+            }
+    
+            await request("PUT", `/users/edit/${user.id}/${photoId}`, {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                username: username,
+                login: username,
+                phoneNumber: phoneNumber,
+            });
+    
             console.log("User updated!");
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.error("Error updating user:", error);
-          })
-          .finally(() => {
+            window.location.reload();
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        } finally {
             setIsLoading(false);
-          });
-      };
+        }
+    };
     
 
       if (isLoading) {
@@ -56,15 +83,53 @@ export default function EditUser( {user} ){
 
       
     return<>
+        
+
         <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 mx-4 px-4 my-3"
             onClick={() => window.location.href = `/users/${user.id}`}
         >
             Go back
         </button>
-    
-            <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form className="space-y-6" onSubmit={handleSubmit}>
 
+            
+            <div className="mb-10 mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+              <form className="space-y-6 mb-10" onSubmit={handleSubmit}>
+              {user.photo_id && (
+                <div className="flex flex-col items-center">
+                  <h2 className="text-xl">Current Profile Picture</h2>
+                  <img
+                    src={`http://localhost:8080/photos/display/${user.photo_id}`}
+                    alt="User Profile"
+                    className="w-32 h-32 rounded-full mt-2 object-cover"
+                  />
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="addProfilePic"
+                  checked={addNewProfilePicture}
+                  onChange={() => setAddNewProfilePicture(!addNewProfilePicture)}
+                  className="w-5 h-5"
+                />
+                <label htmlFor="addProfilePic" className="text-md">
+                  Add a new profile picture
+                </label>
+              </div>
+              
+
+              {addNewProfilePicture && (
+                <>
+                  <h2 className="text-xl">{`Choose your profile picture (The best format would be a square photo)`}</h2>
+                  <PreviewAndAddImages 
+                    typeOfAdd={'single'} 
+                    setFiles={setFiles} 
+                    setPreviewImages={setPreviewImages} 
+                    previewImages={previewImages} 
+                  />
+                </>
+              )}
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900 dark:text-slate-200">
                     First Name
@@ -172,9 +237,9 @@ export default function EditUser( {user} ){
                 <div>
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-10"
                   >
-                    Update your account
+                    Update my account
                   </button>
                 </div>
               </form>

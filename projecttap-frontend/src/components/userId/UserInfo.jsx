@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MdLogout } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Loading from "../../components/Loading";
+import ShowProfilePicture from "../ShowProfilePicture";
 
 export default function UserInfo({ user, params }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,19 +39,17 @@ export default function UserInfo({ user, params }) {
   };
 
   if (loading) {
-    return <Loading />;
+    return(
+    <div className="my-20">
+      <Loading />
+    </div>
+    )
   }
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-3xl mx-28">
       <div className="px-6 py-4 flex items-center space-x-4">
-        <div className="h-14 w-14 rounded-full bg-gray-300">
-          <img
-            src={`http://localhost:8080/photos/display/109`}
-            className="h-full w-full rounded-full object-cover"
-            alt="Profile Picture"
-          />
-        </div>
+        <ShowProfilePicture user={user}/>
         <div>
           <h2 className="text-xl font-semibold text-gray-800">
             {user.firstName} {user.lastName}

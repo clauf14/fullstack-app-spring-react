@@ -33,6 +33,7 @@ export default withAuth(function Page( { params } ){
     const fetchUser = async () => {
         try {
             const response = await request('GET', `http://localhost:8080/users/${params.userId}`);
+            console.log(response.data)
             setUser(response.data);
         } catch (error) {
             console.error('Error fetching user:', error);
