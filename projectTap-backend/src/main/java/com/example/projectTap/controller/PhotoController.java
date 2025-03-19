@@ -65,15 +65,20 @@ public class PhotoController {
 
     // add image - post
     @PostMapping("/add/post")
-    public void addImagePost(@RequestParam("image") MultipartFile file
-            , @RequestParam("postId") Integer postId) throws IOException {
-        byte[] bytes = file.getBytes();
+    public ResponseEntity<Integer> addImagePost(@RequestParam("image") MultipartFile file,
+                                                @RequestParam("postId") Integer postId) throws IOException {
+        System.out.println("Received postId: " + postId);
+        System.out.println("Received file: " + file.getOriginalFilename());
 
+        byte[] bytes = file.getBytes();
         Photo photo = new Photo();
         photo.setImage(bytes);
         photo.setPostId(postId);
-        photoService.create(photo);
+
+        Photo createdPhoto = photoService.create(photo);
+        return ResponseEntity.ok().body(createdPhoto.getPhotoId());
     }
+
     //add image with return of newly created photo id
     @PostMapping("/add")
     public ResponseEntity<Integer> addImage(@RequestParam("image") MultipartFile file) throws IOException {

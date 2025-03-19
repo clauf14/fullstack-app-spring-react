@@ -18,17 +18,22 @@ export const removeAuthenticationToken = () => {
 export const request = (method, url, data) => {
     let headers = {};
     const token = getAuthenticationToken();
+    
     if (token && token !== "null") {
-        headers = { "Authorization": `Bearer ${token}` };
+        headers["Authorization"] = `Bearer ${token}`;
     }
+
+    // If data is FormData, let axios handle headers (multipart/form-data)
+    const isFormData = data instanceof FormData;
 
     return axios({
         method: method,
-        headers: headers,
         url: url,
         data: data,
+        headers: isFormData ? headers : { ...headers, "Content-Type": "application/json" }, // Only set Content-Type for JSON
     });
 };
+
 
 axios.interceptors.response.use(
     (response) => {
@@ -36,10 +41,10 @@ axios.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            removeAuthenticationToken();
-            window.localStorage.removeItem("loginInfo");
+            // removeAuthenticationToken();
+            // window.localStorage.removeItem("loginInfo");
 
-            window.location.href = `/login?message=${encodeURIComponent("Your authentication token has expired. Please login again!")}`;
+            // window.location.href = `/login?message=${encodeURIComponent("Your authentication token has expired. Please login again!")}`;
         }
 
         return Promise.reject(error);

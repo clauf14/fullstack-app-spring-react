@@ -49,9 +49,12 @@ public class UserAuthenticationProvider {
 
     public Authentication validateToken(String token) {
         try {
+            //System.out.println("Validating Token: " + token); // Debugging step
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decoded = verifier.verify(token); // Decode the token
+
+            //System.out.println("Decoded Token: " + decoded.getSubject()); // Debugging step
 
             UserDto user = userService.findByLogin(decoded.getSubject());
             return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
@@ -59,11 +62,11 @@ public class UserAuthenticationProvider {
             System.out.println("TOKEN Is EXPIRED");
             throw new TokenExpiredException("Token has expired", e.getExpiredOn());
         } catch (Exception e) {
-            // Handle other exceptions here
-            // For example, log the error or throw a custom exception
+            System.out.println("Token validation failed: " + e.getMessage()); // Debugging step
             throw new RuntimeException("Failed to validate token", e);
         }
     }
+
 
 }
 

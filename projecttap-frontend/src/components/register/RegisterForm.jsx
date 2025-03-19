@@ -5,6 +5,8 @@ import { request, setAuthenticationToken } from '../../app/axios_helper';
 import AuthContent from '../AuthContent';
 import {useRouter} from 'next/navigation';
 import HeaderHomepage from '../HeaderHomepage';
+import { CircleCheckBig , Ban  } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react"
 
 export default function Form(){
     const [firstName, setFirstName] = useState('');
@@ -12,12 +14,41 @@ export default function Form(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState(''); // Default status
     const [password, setPassword] = useState("");
-    const [login, setLogin] = useState("")
     const [message, setMessage] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [conditions, setConditions] = useState({
+      length: false,
+      uppercase: false,
+      number: false,
+      symbol: false,
+    });
+
+    const validatePassword = (password) => {
+      const newConditions = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        number: /[0-9]/.test(password),
+        symbol: /[!@#$%^&*().?":{}|<>]/.test(password),
+      };
+      setConditions(newConditions);
+    };
+
+    const handlePasswordChange = (e) => {
+      const newPassword = e.target.value;
+      setPassword(newPassword);
+      validatePassword(newPassword)
+    };
 
     const handleSubmit = (e) => {
       e.preventDefault();
+
+      if (!Object.values(conditions).every(Boolean)) {
+        setMessage("Password does not meet all the requirements!");
+        return;
+      }
+
       request(
         "POST",
         "/register",
@@ -143,15 +174,47 @@ export default function Form(){
                     </label>
                   </div>
                   <div className="mt-2">
+                  <div className="relative w-full">
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
                       required
-                      placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 text-left shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={handlePasswordChange}
+                      className="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 text-left shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
+                    {/* Eye Icon Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-2 flex items-center text-indigo-600 hover:text-indigo-900"
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+
+                    {/* password strength indicators */}
+                    <div className="mt-2 text-sm">
+                      <div className="flex items-center gap-2  dark:text-slate-200">
+                        {conditions.length ? <CircleCheckBig  className="text-green-500" size={16} /> : <Ban  className="text-red-500" size={16} />}
+                        <span>Password must be at least 8 characters</span>
+                      </div>
+                      <div className="flex items-center gap-2  dark:text-slate-200">
+                        {conditions.uppercase ? <CircleCheckBig  className="text-green-500" size={16} /> : <Ban  className="text-red-500" size={16} />}
+                        <span>At least one uppercase letter</span>
+                      </div>
+                      <div className="flex items-center gap-2 dark:text-slate-200">
+                        {conditions.number ? <CircleCheckBig  className="text-green-500" size={16} /> : <Ban  className="text-red-500" size={16} />}
+                        <span>At least one number</span>
+                      </div>
+                      <div className="flex items-center gap-2  dark:text-slate-200">
+                        {conditions.symbol ? <CircleCheckBig  className="text-green-500" size={16} /> : <Ban  className="text-red-500" size={16} />}
+                        <span>At least one special character</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
     
@@ -165,7 +228,7 @@ export default function Form(){
                 </div>
               </form>
               <div className='mt-4 flex items-center justify-center'>
-                <a className={message.includes('exists') ? "text-red-500 font-semibold" : "text-green-500 hover:underline font-semibold"} href='/login'>{message}</a>
+                <a className={(message.includes('meet') || message.includes('exists')) ? "text-red-500 font-semibold" : "text-green-500 hover:underline font-semibold"} href='/login'>{message}</a>
               </div>
     
               <p className="mt-10 text-center text-sm text-gray-500  dark:text-slate-300">

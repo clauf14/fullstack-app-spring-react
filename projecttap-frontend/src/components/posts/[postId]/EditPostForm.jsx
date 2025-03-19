@@ -51,21 +51,18 @@ export default function EditPostForm( {post, photos} ) {
         currency: currency
       });
 
+      if(response){
         const postId = post.postId;
         for (const file of files) {
           const formData = new FormData();
           formData.append('image', file);
           formData.append('postId', postId);
 
-          const photoResponse = await fetch(`http://localhost:8080/photos/add/post`, {
-            method: 'POST',
-            body: formData
-          });
-
-          if (photoResponse.ok) {
-            console.log('Image added successfully');
-          } else {
-            console.error('Failed to add image');
+          try {
+            const photoResponse = await request('POST', 'http://localhost:8080/photos/add/post', formData);
+            console.log('Upload success:', photoResponse.data);
+          } catch (error) {
+              console.error('Upload failed:', error);
           }
         }
 
@@ -73,6 +70,7 @@ export default function EditPostForm( {post, photos} ) {
         setFiles([]);
         setPreviewImages([]);
         window.location.reload()
+      }
       
     } catch (error) {
       console.error('Error adding post and images:', error);

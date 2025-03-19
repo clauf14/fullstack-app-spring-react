@@ -27,8 +27,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.GET, "/photos/display/{photoId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add/post", "/photos/add").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/photos/display/{photoId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add").permitAll()//login and register are the endpoint where the auth token is not required
                         .anyRequest().authenticated());
         return http.build();
     }
