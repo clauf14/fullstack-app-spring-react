@@ -2,6 +2,7 @@ package com.example.projectTap.services;
 
 import com.example.projectTap.entities.Photo;
 import com.example.projectTap.entities.Post;
+import com.example.projectTap.repositories.LocationRepository;
 import com.example.projectTap.repositories.PhotoRepository;
 import com.example.projectTap.repositories.PostRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +19,8 @@ public class PostService {
     private PostRepository postRepository;
     @Autowired
     private PhotoRepository photoRepository;
+    @Autowired
+    private LocationRepository locationRepository;
 
     public Post create(Post post) {
         Post createdPost = postRepository.save(post);
@@ -41,9 +44,10 @@ public class PostService {
     }
 
     @Transactional
-    public String delete(Integer id) {
+    public String delete(Integer id, Integer locationId) {
         photoRepository.deleteByPostId(id);
         postRepository.deleteById(id);
+        locationRepository.deleteById(locationId);
         return "deleted";
     }
 

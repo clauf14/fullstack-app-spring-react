@@ -97,9 +97,10 @@ public class PostController {
 
 
     @Transactional
-    @DeleteMapping("/delete/{postId}")
-    public void deleteOnePost(@PathVariable("postId") Integer postId){
-        postService.delete(postId);
+    @DeleteMapping("/delete/{postId}/{locationId}")
+    public void deleteOnePost(@PathVariable("postId") Integer postId,
+                              @PathVariable("locationId") Integer locationId){
+        postService.delete(postId, locationId);
     }
 
 }

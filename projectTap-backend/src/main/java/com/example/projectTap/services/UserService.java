@@ -8,6 +8,7 @@ import com.example.projectTap.entities.User;
 import com.example.projectTap.exceptions.AppException;
 import com.example.projectTap.mappers.UserMapper;
 import com.example.projectTap.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties;
 import org.springframework.http.HttpStatus;
@@ -72,5 +73,10 @@ public class UserService {
         User updatedUser = userRepository.save(user);
 
         return userMapper.toUserDto(updatedUser);
+    }
+
+    @Transactional
+    public void removeUserPhoto(Integer photoId) {
+        userRepository.updatePhotoIdToNull(photoId);
     }
 }
