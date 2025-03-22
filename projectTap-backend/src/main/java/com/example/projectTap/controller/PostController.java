@@ -22,10 +22,10 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    record NewPostRequest(String title, String description, Double price, String location,
+    record NewPostRequest(String title, String description, Double price, Integer locationId,
                           Integer userId,Integer subcategoryId, Date created, String status, String currency){}
 
-    record ExistingPostRequest(String title, String description, Double price, String location,
+    record ExistingPostRequest(String title, String description, Double price, Integer locationId,
                            String status, String currency){}
 
     @GetMapping("/all")
@@ -55,7 +55,7 @@ public class PostController {
             post.setTitle(request.title);
             post.setDescription(request.description);
             post.setPrice(request.price);
-            post.setLocation(request.location);
+            post.setLocationId(request.locationId);
             post.setUserId(request.userId);
             post.setSubcategoryId(request.subcategoryId);
             post.setCreated(request.created);
@@ -82,7 +82,7 @@ public class PostController {
             post.setTitle(request.title());
             post.setDescription(request.description());
             post.setPrice(request.price());
-            post.setLocation(request.location());
+            post.setLocationId(request.locationId());
             post.setStatus(request.status());
             post.setCurrency(request.currency());
 

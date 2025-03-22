@@ -13,13 +13,11 @@ public class Post {
     @Column(name = "post_id")
     private Integer postId;
 
-    @Column(name = "photo_id")
-    private Integer photoId;
-
     private String title;
     private String description;
     private Double price;
-    private String location;
+    @Column(name = "location_id")
+    private Integer locationId;
 
     @Column(name = "user_id")
     private Integer userId;
@@ -67,12 +65,12 @@ public class Post {
         this.price = price;
     }
 
-    public String getLocation() {
-        return location;
+    public Integer getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocationId(Integer locationId) {
+        this.locationId = locationId;
     }
 
     public Integer getUserId() {

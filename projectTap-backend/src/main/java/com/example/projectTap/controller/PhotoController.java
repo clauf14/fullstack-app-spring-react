@@ -65,7 +65,7 @@ public class PhotoController {
 
     // add image - post
     @PostMapping("/add/post")
-    public ResponseEntity<Integer> addImagePost(@RequestParam("image") MultipartFile file,
+    public void addImagePost(@RequestParam("image") MultipartFile file,
                                                 @RequestParam("postId") Integer postId) throws IOException {
         System.out.println("Received postId: " + postId);
         System.out.println("Received file: " + file.getOriginalFilename());
@@ -75,8 +75,9 @@ public class PhotoController {
         photo.setImage(bytes);
         photo.setPostId(postId);
 
-        Photo createdPhoto = photoService.create(photo);
-        return ResponseEntity.ok().body(createdPhoto.getPhotoId());
+//        Photo createdPhoto =
+//        return ResponseEntity.ok().body(createdPhoto.getPhotoId());
+        photoService.create(photo);
     }
 
     //add image with return of newly created photo id

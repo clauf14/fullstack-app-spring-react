@@ -1,2 +1,29 @@
-package com.example.projectTap.services;public class LocationService {
+package com.example.projectTap.services;
+
+import com.example.projectTap.entities.Location;
+import com.example.projectTap.repositories.LocationRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class LocationService {
+
+    @Autowired
+    private LocationRepository locationRepository;
+
+    public Location create(Location location) {
+        return locationRepository.save(location);
+    }
+
+    public Location viewById(Integer locationId){
+        return locationRepository.findById(locationId)
+                .orElseThrow(() -> new EntityNotFoundException("Photo not found with ID: " + locationId));
+    }
+
+    public void deleteById(Integer locationId){
+        locationRepository.deleteById(locationId);
+    }
 }

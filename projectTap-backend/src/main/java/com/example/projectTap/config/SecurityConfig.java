@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.GET,"/photos/display/{photoId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login", "/register", "/photos/add/post", "/photos/add").permitAll()//login and register are the endpoint where the auth token is not required
+                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()//login and register are the endpoint where the auth token is not required
                         .anyRequest().authenticated());
         return http.build();
     }
