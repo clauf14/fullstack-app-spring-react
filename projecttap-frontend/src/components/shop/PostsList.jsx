@@ -10,9 +10,16 @@ export default function ProductsList({ selectedSubcategory, searchQuery, loginIn
     try {
       const response = await request("GET", "http://localhost:8080/posts/all")
       const posts = response.data
-      const postsWithPhotos = await Promise.all(posts.map((post) => fetchDataPhoto(post.postId, post)))
 
-      setPostList(postsWithPhotos)
+      const postsWithDetails = await Promise.all(
+        posts.map(async (post) => {
+          const postWithPhotos = await fetchDataPhoto(post.postId, post)
+          const postWithLocation = await fetchLocation(post.locationId, postWithPhotos)
+          return postWithLocation
+        })
+      )
+
+      setPostList(postsWithDetails)
       setIsLoading(false)
     } catch (error) {
       console.error("Error fetching posts:", error)
@@ -23,12 +30,20 @@ export default function ProductsList({ selectedSubcategory, searchQuery, loginIn
   const fetchDataPhoto = async (postId, post) => {
     try {
       const response = await request("GET", `http://localhost:8080/photos/all/post/${postId}`)
-      const photos = response.data
-
-      return { ...post, photos }
+      return { ...post, photos: response.data }
     } catch (error) {
       console.error(`Error fetching photos for post ${postId}:`, error)
-      return { ...post, photos: [] } // Return post with empty photos array on error
+      return { ...post, photos: [] } 
+    }
+  }
+
+  const fetchLocation = async (locationId, post) => {
+    try {
+      const response = await request("GET", `/location/${locationId}`)
+      return { ...post, location: response.data.name }
+    } catch (error) {
+      console.error(`Error fetching location for post ${post.postId}:`, error)
+      return { ...post, location: "Unknown location" }
     }
   }
 
@@ -36,11 +51,13 @@ export default function ProductsList({ selectedSubcategory, searchQuery, loginIn
     fetchDataPost()
   }, [])
 
-  // Filter the postList based on the selected subcategory
-  let filteredPosts = selectedSubcategory ? postList.filter((post) => post.subcategoryId === selectedSubcategory) : postList
+  let filteredPosts = selectedSubcategory 
+    ? postList.filter((post) => post.subcategoryId === selectedSubcategory) 
+    : postList
 
-  // Filter the postList based on the searchQuery
-  filteredPosts = searchQuery ? filteredPosts.filter((post) => post.title.toLowerCase().includes(searchQuery.toLowerCase())) : filteredPosts
+  filteredPosts = searchQuery 
+    ? filteredPosts.filter((post) => post.title.toLowerCase().includes(searchQuery.toLowerCase())) 
+    : filteredPosts
 
   return (
     <>
@@ -62,19 +79,32 @@ export default function ProductsList({ selectedSubcategory, searchQuery, loginIn
                   className="max-w-sm rounded overflow-hidden shadow-lg w-1/2 px-2 mx-3 mb-10"
                   style={{ maxWidth: "300px", textDecoration: "none", color: "inherit" }}
                 >
+                 
                   <img
                     className="w-full h-48 object-cover"
-                    src={post.photos.length > 0 ? `http://localhost:8080/photos/display/${post.photos[0].photoId}` : "https://icrier.org/wp-content/uploads/2022/09/Event-Image-Not-Found.jpg"}
+                    src={post.photos.length > 0 
+                      ? `http://localhost:8080/photos/display/${post.photos[0].photoId}` 
+                      : "https://icrier.org/wp-content/uploads/2022/09/Event-Image-Not-Found.jpg"}
                     alt=""
                   />
+                  
+                  
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{post.title}</div>
                     <p className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">{post.status}</p>
                   </div>
+
+                 
                   <div className="px-6 pt-4 pb-2">
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{`${post.price} ${post.currency}`}</span>
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{post.location}</span>
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{`Added at ${new Date(post.created).toLocaleString()}`}</span>
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                      {`${post.price} ${post.currency}`}
+                    </span>
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                      {post.location}
+                    </span>
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                      {`Added at ${new Date(post.created).toLocaleString()}`}
+                    </span>
                   </div>
                 </a>
               ))

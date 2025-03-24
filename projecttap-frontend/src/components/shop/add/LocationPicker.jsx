@@ -81,7 +81,7 @@ export default function LocationPicker({ locationLatitude, locationLongitude, se
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <CenterMapOnMarker position={position} />
         <Marker position={position} icon={customIcon}></Marker>
-        <Circle center={position} radius={500} fillColor="blue" fillOpacity={0.2} stroke={false} />
+        <Circle center={position} radius={1000} fillColor="blue" fillOpacity={0.2} stroke={false} />
       </MapContainer>
     </div>
   )

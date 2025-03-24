@@ -31,52 +31,63 @@ export default function EditUser({ user }) {
   }, [user])
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const token = getAuthenticationToken()
+      e.preventDefault();
+      setIsLoading(true);
+      const token = getAuthenticationToken();
 
-    try {
-      let photoId = user.photo_id // Default to current photo ID if no new photo is uploaded
+      try {
+          let photoId = user.photo_id;
 
-      if (addNewProfilePicture && files != null) {
-        const formData = new FormData()
-        formData.append("image", files[0])
+          if (addNewProfilePicture && files.length > 0) {
+              if (user.photo_id) {
+                  try {
+                      await request("DELETE", `/photos/delete/${user.photo_id}`);
+                      console.log("Old profile photo deleted successfully.");
+                  } catch (error) {
+                      console.error("Error deleting old profile photo:", error);
+                  }
+              }
 
-        const photoResponse = await fetch("http://localhost:8080/photos/add", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
-          body: formData,
-        })
+              const formData = new FormData();
+              formData.append("image", files[0]);
 
-        if (!photoResponse.ok) {
-          throw new Error("Failed to upload photo")
-        }
+              const photoResponse = await fetch("http://localhost:8080/photos/add", {
+                  method: "POST",
+                  headers: {
+                      Authorization: `Bearer ${token}`, 
+                  },
+                  body: formData,
+              });
 
-        const result = await photoResponse.json()
-        console.log("Photo Response:", result)
-        photoId = result // Update photoId with the new uploaded photo
+              if (!photoResponse.ok) {
+                  throw new Error("Failed to upload new profile photo");
+              }
+
+              const result = await photoResponse.json();
+              console.log("New photo uploaded:", result);
+              user.photo_id = result;
+              photoId = result; 
+          }
+
+          await request("PUT", `/users/edit/${user.id}/${photoId}`, {
+              firstName,
+              lastName,
+              email,
+              username,
+              login: username,
+              phoneNumber,
+          });
+
+          console.log("User updated!");
+          window.location.reload();
+      } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again.");
+      } finally {
+          setIsLoading(false);
       }
+  };
 
-      await request("PUT", `/users/edit/${user.id}/${photoId}`, {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        username: username,
-        login: username,
-        phoneNumber: phoneNumber,
-      })
-
-      console.log("User updated!")
-      window.location.reload()
-    } catch (error) {
-      console.error("Error:", error)
-      alert("An error occurred. Please try again.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   if (isLoading) {
     return (
@@ -94,7 +105,7 @@ export default function EditUser({ user }) {
 
       <div className="mb-10 mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6 mb-10" onSubmit={handleSubmit}>
-          {user.photo_id && (
+          {user.photo_id != null && (
             <div className="flex flex-col items-center">
               <h2 className="text-xl">Current Profile Picture</h2>
               <img src={`http://localhost:8080/photos/display/${user.photo_id}`} alt="User Profile" className="w-32 h-32 rounded-full mt-2 object-cover" />
