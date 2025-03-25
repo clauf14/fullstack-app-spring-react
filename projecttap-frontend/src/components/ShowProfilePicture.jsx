@@ -5,7 +5,7 @@ export default function ShowProfilePicture({ user }) {
     const photoUrl = useMemo(() => 
         user.photo_id 
             ? `http://localhost:8080/photos/display/${user.photo_id}`
-            : `http://localhost:8080/photos/display/144`,
+            : `https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png`,
             [user.photo_id]
     );
 
