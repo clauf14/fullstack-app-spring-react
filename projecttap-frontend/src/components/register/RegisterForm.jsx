@@ -72,7 +72,7 @@ export default function Form() {
       <HeaderHomepage />
       <div className="dark:bg-slate-800 flex flex-col justify-center px-6 py-6 lg:px-8">
         <ChangeTheme />
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-4 md:mt-10">
           <svg
             className="mx-auto h-14 w-auto"
             fill="#ffffff"

@@ -43,7 +43,7 @@ export default function UserInfo({ user, params }) {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-3xl mx-28">
+    <div className="bg-white shadow-lg rounded-lg mx-4 md:mx-28">
       <div className="px-6 py-4 flex items-center space-x-4">
         <ShowProfilePicture user={user} />
         <div>

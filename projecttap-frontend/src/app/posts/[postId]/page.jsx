@@ -128,31 +128,33 @@ export default withAuth(function Page({ params }) {
       <Header />
       <div>
         <a href="/shop">
-          <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 mb-4 mx-4">Go back to the shop</button>
+          <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 mb-2 mx-4">Go back to the shop</button>
         </a>
       </div>
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-3 gap-4 mx-40">
-          <div className="col-span-2">
-            <div className="mx-auto mb-4 overflow-hidden rounded shadow-lg bg-black">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mx-4 lg:mx-16">
+          <div className="lg:col-span-2">
+            <div className="mx-auto mb-4 overflow-hidden rounded shadow-lg bg-black h-[300px] sm:h-[400px] md:h-[500px] xl:h-[600px]">
               {photos.length === 1 ? (
-                <div className="h-120 overflow-hidden flex justify-center items-center px-10">
-                  <img src={`http://localhost:8080/photos/display/${photos[0].photoId}`} alt="Preview" className="w-full h-100 object-cover" />
+                <div className="h-full overflow-hidden flex justify-center items-center">
+                  <img src={`http://localhost:8080/photos/display/${photos[0].photoId}`} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="h-120 overflow-hidden flex justify-center items-center px-10">
-                  <Slider className="w-full px-28">
+                <div className="w-full h-full lg:px-8">
+                  <Slider className="w-full h-full">
                     {photos.map((photo, index) => (
-                      <img key={index} src={`http://localhost:8080/photos/display/${photo.photoId}`} alt={`Photo ${index}`} className="h-100 object-cover" />
+                      <div key={index} className="w-full h-full flex justify-center items-center">
+                        <img src={`http://localhost:8080/photos/display/${photo.photoId}`} alt={`Photo ${index}`} className="w-full h-full object-cover" />
+                      </div>
                     ))}
                   </Slider>
                 </div>
               )}
             </div>
 
-            <div className="bg-white rounded shadow-lg px-5 py-5 mb-10">
+            <div className="bg-white rounded shadow-lg px-5 py-5 mb-2">
               <div className="my-5">
                 <span className="flex items-center">
                   <span className="mr-1 text-sm">Posted at {new Date(post.created).toLocaleString()}</span>
@@ -164,8 +166,8 @@ export default withAuth(function Page({ params }) {
               <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
               <p className="text-gray-700 text-3xl font-bold mb-4">{`${post.price} ${post.currency}`}</p>
               <div className="mb-5">
-                <span className="text-gray-700 border border-gray-300 rounded-md p-2">{`Status: ${post.status}`}</span>
-                <span className="text-gray-700 border border-gray-300 rounded-md p-2 ml-4">{`Subcategory: ${subcategory.title}`}</span>
+                <p className="inline-block text-gray-700 border border-gray-300 rounded-md p-2 mr-2 sm:mr-0">{`Status: ${post.status}`}</p>
+                <p className="inline-block text-gray-700 border border-gray-300 rounded-md p-2 mt-2 sm:ml-2">{`Subcategory: ${subcategory.title}`}</p>
               </div>
               <div>
                 <h1 className="text-2xl font-bold mb-4">Description</h1>
@@ -174,7 +176,7 @@ export default withAuth(function Page({ params }) {
             </div>
           </div>
 
-          <div className="bg-white rounded shadow-lg px-5 py-5 mb-10">
+          <div className="bg-white rounded shadow-lg px-5 py-5 mb-10 lg:col-span-1">
             <h1 className="text-2xl font-semibold mb-4">Seller</h1>
             <div className="flex items-center space-x-4 mb-4">
               <ShowProfilePicture user={user} />

@@ -1,21 +1,15 @@
-import { useMemo } from "react";
+import { useMemo } from "react"
 
 export default function ShowProfilePicture({ user }) {
-    // Determine if the user has a profile picture
-    const photoUrl = useMemo(() => 
-        user.photo_id 
-            ? `http://localhost:8080/photos/display/${user.photo_id}`
-            : `https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png`,
-            [user.photo_id]
-    );
+  // Determine if the user has a profile picture
+  const photoUrl = useMemo(
+    () => (user.photo_id ? `http://localhost:8080/photos/display/${user.photo_id}` : `https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png`),
+    [user.photo_id]
+  )
 
-    return (
-        <div className="h-14 w-14 rounded-full bg-gray-300">
-            <img
-                src={photoUrl}
-                className="h-full w-full rounded-full object-cover"
-                alt={user.photo_id ? "User's Profile Picture" : "Default Profile Picture"}
-            />
-        </div>
-    );
+  return (
+    <div className="h-14 w-14 rounded-full bg-gray-300">
+      <img src={photoUrl} className="h-full w-full rounded-full object-cover" alt={user.photo_id ? "User's Profile Picture" : "Default Profile Picture"} />
+    </div>
+  )
 }

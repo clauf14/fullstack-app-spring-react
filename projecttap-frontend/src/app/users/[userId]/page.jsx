@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { request } from "@/app/axios_helper"
 import PostsListForUser from "@/components/userId/PostsListForUser"
 
-import { getAuthenticationToken, getDecodedToken } from "@/app/axios_helper"
+import { getDecodedToken } from "@/app/axios_helper"
 
 import withAuth from "@/app/withAuth"
 

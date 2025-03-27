@@ -1,79 +1,75 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import ProductsList from "./PostsList";
-import { request } from "@/app/axios_helper";
+import axios from "axios"
+import { useState, useEffect } from "react"
+import ProductsList from "./PostsList"
+import { request } from "@/app/axios_helper"
 
 export default function CategoriesShop({ loginInfo }) {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState("");
-  const [selectedCategoryName, setSelectedCategoryName] = useState("");
-  const [selectedSubcategoryName, setSelectedSubcategoryName] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const [subcategories, setSubcategories] = useState([])
+  const [selectedSubcategory, setSelectedSubcategory] = useState("")
+  const [selectedCategoryName, setSelectedCategoryName] = useState("")
+  const [selectedSubcategoryName, setSelectedSubcategoryName] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    request('GET', "http://localhost:8080/category/all")
+    request("GET", "http://localhost:8080/category/all")
       .then((response) => {
-        setCategories(response.data);
+        setCategories(response.data)
       })
       .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+        console.error("Error fetching categories:", error)
+      })
+  }, [])
 
   useEffect(() => {
     if (selectedCategory) {
-      request('GET', `http://localhost:8080/subcategory/display/${selectedCategory}`)
+      request("GET", `http://localhost:8080/subcategory/display/${selectedCategory}`)
         .then((response) => {
-          setSubcategories(response.data);
+          setSubcategories(response.data)
         })
         .catch((error) => {
-          console.error("Error fetching subcategories:", error);
-        });
+          console.error("Error fetching subcategories:", error)
+        })
     }
-  }, [selectedCategory]);
+  }, [selectedCategory])
 
   const handleCategoryChange = (event) => {
-    const selectedCategoryName = event.target.value;
-    const matchedCategory = categories.find(
-      (category) => category.title === selectedCategoryName
-    );
-    setSelectedCategoryName(selectedCategoryName);
+    const selectedCategoryName = event.target.value
+    const matchedCategory = categories.find((category) => category.title === selectedCategoryName)
+    setSelectedCategoryName(selectedCategoryName)
     if (matchedCategory) {
-      setSelectedCategory(matchedCategory.categoryId);
+      setSelectedCategory(matchedCategory.categoryId)
     }
-  };
+  }
 
   const handleSubcategoryChange = (event) => {
-    const selectedSubcategoryName = event.target.value;
-    const matchedSubcategory = subcategories.find(
-      (subcategory) => subcategory.title === selectedSubcategoryName
-    );
-    setSelectedSubcategoryName(selectedSubcategoryName);
+    const selectedSubcategoryName = event.target.value
+    const matchedSubcategory = subcategories.find((subcategory) => subcategory.title === selectedSubcategoryName)
+    setSelectedSubcategoryName(selectedSubcategoryName)
     if (matchedSubcategory) {
-      setSelectedSubcategory(matchedSubcategory.subcategoryId);
+      setSelectedSubcategory(matchedSubcategory.subcategoryId)
     }
-  };
+  }
 
   const clearFilter = () => {
-    setSelectedSubcategory("");
-    setSelectedSubcategoryName("");
-    setSelectedCategoryName("");
-    setSearchQuery("");
-    setSubcategories([]);
-  };
+    setSelectedSubcategory("")
+    setSelectedSubcategoryName("")
+    setSelectedCategoryName("")
+    setSearchQuery("")
+    setSubcategories([])
+  }
 
   const handleSearchInputChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
+    setSearchQuery(event.target.value)
+  }
 
   return (
     <>
-      <div className="mt-3">
-        <p className="text-center text-gray-600">Filter by subcategories or search by name</p>
+      <div className="mt-3 mb-3">
+        <p className="text-center text-gray-600 mx-4">Filter by subcategories or search by name</p>
       </div>
-      <div className="flex items-center justify-center mb-3 space-x-3">
+      <div className="flex flex-col md:flex-row items-center justify-center mb-3 space-x-0 md:space-x-3 space-y-3 md:space-y-0">
         <div>
           <input
             type="text"
@@ -113,19 +109,12 @@ export default function CategoriesShop({ loginInfo }) {
             </select>
           </div>
         )}
-        <button
-          className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 my-4"
-          onClick={clearFilter}
-        >
+        <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 my-4" onClick={clearFilter}>
           Clear Filters
         </button>
       </div>
-      
-      <ProductsList
-        loginInfo={loginInfo}
-        selectedSubcategory={selectedSubcategory}
-        searchQuery={searchQuery}
-      />
+
+      <ProductsList loginInfo={loginInfo} selectedSubcategory={selectedSubcategory} searchQuery={searchQuery} />
     </>
-  );
+  )
 }

@@ -44,22 +44,17 @@ export default function Location({ post }) {
       <div className="text-2xl font-semibold mt-10 mb-4 text-black">Location</div>
 
       {/* Location Info */}
-      <div className="p-4 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center">
+      <div className="p-4 bg-white rounded-xl shadow-md flex items-center">
         <FiMapPin className="h-6 w-6 text-indigo-600 mr-2" />
         <p className="text-gray-500">{locationName || "No location selected"}</p>
       </div>
 
       {/* Map Section */}
-      <div className="mt-4 max-w-sm mx-auto">
-        <MapContainer 
-          center={position} 
-          zoom={13} 
-          style={{ height: "300px", width: "100%" }} 
-          className="border rounded"
-        >
-          <TileLayer 
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
-            attribution={`<a href="https://www.google.com/maps?q=${position[0]},${position[1]}" target="_blank" style="color: #4F46E5;">Open in Google Maps</a>`} 
+      <div className="mt-4">
+        <MapContainer center={position} zoom={13} style={{ height: "300px", width: "100%" }} className="border rounded">
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution={`<a href="https://www.google.com/maps?q=${position[0]},${position[1]}" target="_blank" style="color: #4F46E5;">Open in Google Maps</a>`}
           />
           <Circle center={position} radius={1000} fillColor="blue" fillOpacity={0.2} stroke={false} />
         </MapContainer>
