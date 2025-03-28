@@ -31,63 +31,62 @@ export default function EditUser({ user }) {
   }, [user])
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      setIsLoading(true);
-      const token = getAuthenticationToken();
+    e.preventDefault()
+    setIsLoading(true)
+    const token = getAuthenticationToken()
 
-      try {
-          let photoId = user.photo_id;
+    try {
+      let photoId = user.photo_id
 
-          if (addNewProfilePicture && files.length > 0) {
-              if (user.photo_id) {
-                  try {
-                      await request("DELETE", `/photos/delete/${user.photo_id}`);
-                      console.log("Old profile photo deleted successfully.");
-                  } catch (error) {
-                      console.error("Error deleting old profile photo:", error);
-                  }
-              }
-
-              const formData = new FormData();
-              formData.append("image", files[0]);
-
-              const photoResponse = await fetch("http://localhost:8080/photos/add", {
-                  method: "POST",
-                  headers: {
-                      Authorization: `Bearer ${token}`, 
-                  },
-                  body: formData,
-              });
-
-              if (!photoResponse.ok) {
-                  throw new Error("Failed to upload new profile photo");
-              }
-
-              const result = await photoResponse.json();
-              console.log("New photo uploaded:", result);
-              user.photo_id = result;
-              photoId = result; 
+      if (addNewProfilePicture && files.length > 0) {
+        if (user.photo_id) {
+          try {
+            await request("DELETE", `/photos/delete/${user.photo_id}`)
+            console.log("Old profile photo deleted successfully.")
+          } catch (error) {
+            console.error("Error deleting old profile photo:", error)
           }
+        }
 
-          await request("PUT", `/users/edit/${user.id}/${photoId}`, {
-              firstName,
-              lastName,
-              email,
-              username,
-              login: username,
-              phoneNumber,
-          });
+        const formData = new FormData()
+        formData.append("image", files[0])
 
-          console.log("User updated!");
-          window.location.reload();
-      } catch (error) {
-          console.error("Error:", error);
-          alert("An error occurred. Please try again.");
-      } finally {
-          setIsLoading(false);
+        const photoResponse = await fetch("http://localhost:8080/photos/add", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        })
+
+        if (!photoResponse.ok) {
+          throw new Error("Failed to upload new profile photo")
+        }
+
+        const result = await photoResponse.json()
+        console.log("New photo uploaded:", result)
+        user.photo_id = result
+        photoId = result
       }
-  };
 
+      await request("PUT", `/users/edit/${user.id}/${photoId}`, {
+        firstName,
+        lastName,
+        email,
+        username,
+        login: username,
+        phoneNumber,
+      })
+
+      console.log("User updated!")
+      window.location.reload()
+    } catch (error) {
+      console.error("Error:", error)
+      alert("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -103,7 +102,7 @@ export default function EditUser({ user }) {
         Go back
       </button>
 
-      <div className="mb-10 mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="mb-10 mx-4 sm:mx-auto mt-5 sm:w-full sm:max-w-sm">
         <form className="space-y-6 mb-10" onSubmit={handleSubmit}>
           {user.photo_id != null && (
             <div className="flex flex-col items-center">
@@ -236,10 +235,10 @@ export default function EditUser({ user }) {
                   </div>
                 </div> */}
 
-          <div>
+          <div className="mb-4">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-10"
+              className="mb-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-10"
             >
               Update my account
             </button>

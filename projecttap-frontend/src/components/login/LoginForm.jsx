@@ -48,7 +48,7 @@ export default function LoginForm() {
         <ChangeTheme />
 
         <div>
-          <h1 className="text-red-500 text-bold text-xl">{tokenMessage}</h1>
+          <h1 className="text-red-500 text-center text-bold text-md md:text-lg py-4">{tokenMessage}</h1>
         </div>
 
         <div className="mt-4 md:mt-10">
@@ -81,7 +81,7 @@ export default function LoginForm() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6 mb-10" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900 dark:text-slate-200">
                 Username

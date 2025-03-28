@@ -86,7 +86,7 @@ export default function ProductsList({ selectedSubcategory, searchQuery, loginIn
                       <span className="sm:hidden">{post.title.length > 25 ? post.title.slice(0, 30) + "..." : post.title}</span>
                       <span className="hidden sm:inline">{post.title.length > 60 ? post.title.slice(0, 60) + "..." : post.title}</span>
                     </div>
-                    <p className="bg-gray-200 rounded-full px-3 py-2 text-sm font-bold text-gray-900 mb-2">{`${post.price} ${post.currency}`}</p>
+                    <p className="bg-gray-200 rounded-full px-3 py-2 text-sm sm:text-md font-bold text-gray-900 mb-2">{`${post.price} ${post.currency}`}</p>
                   </div>
 
                   <div className="px-2 pt-2 pb-2">

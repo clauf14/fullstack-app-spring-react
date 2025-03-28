@@ -128,7 +128,7 @@ export default withAuth(function Page({ params }) {
       <Header />
       <div>
         <a href="/shop">
-          <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 mb-2 mx-4">Go back to the shop</button>
+          <button className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold rounded-full py-2 px-4 mb-4 mt-2 mx-4">Go back to the shop</button>
         </a>
       </div>
       {isLoading ? (
@@ -142,7 +142,7 @@ export default withAuth(function Page({ params }) {
                   <img src={`http://localhost:8080/photos/display/${photos[0].photoId}`} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="w-full h-full lg:px-8">
+                <div className="w-full h-full px-8">
                   <Slider className="w-full h-full">
                     {photos.map((photo, index) => (
                       <div key={index} className="w-full h-full flex justify-center items-center">

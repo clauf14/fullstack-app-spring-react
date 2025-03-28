@@ -159,8 +159,8 @@ export default function AddPost({ selectedSubcategory, aiOn, setAiOn, setSelecte
   }
 
   return (
-    <div className="flex justify-center items-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-3xl">
+    <div className="flex justify-center items-center bg-gray-100 my-4 mx-4 md:mx-28">
+      <div className="bg-white p-4 rounded-md shadow-lg w-full max-w-3x mb-4">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <PreviewAndAddImages typeOfAdd={"multiple"} setFiles={setFiles} setPreviewImages={setPreviewImages} previewImages={previewImages} />
 

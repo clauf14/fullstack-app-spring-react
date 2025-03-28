@@ -35,4 +35,16 @@ public class LocationController {
 
         return ResponseEntity.ok().body(createdLocation);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Location> updateLocation(@RequestBody Location locationBody) {
+        Location location = new Location();
+        location.setLocationId(locationBody.getLocationId());
+        location.setName(locationBody.getName());
+        location.setLatitude(locationBody.getLatitude());
+        location.setLongitude(locationBody.getLongitude());
+        Location updatedLocation = locationService.update(locationBody);
+
+        return ResponseEntity.ok().body(updatedLocation);
+    }
 }

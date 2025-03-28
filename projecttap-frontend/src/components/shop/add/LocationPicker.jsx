@@ -9,7 +9,7 @@ const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLa
 const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
 const Circle = dynamic(() => import("react-leaflet").then((mod) => mod.Circle), { ssr: false })
 
-export default function LocationPicker({ locationLatitude, locationLongitude, setLocationName, setLocationLatitude, setLocationLongitude }) {
+export default function LocationPicker({ locationName, locationLatitude, locationLongitude, setLocationName, setLocationLatitude, setLocationLongitude }) {
   const [L, setL] = useState(null)
   const [position, setPosition] = useState([locationLatitude || 44.4268, locationLongitude || 26.1025]) // Default to Bucharest
   const [mounted, setMounted] = useState(false)
@@ -17,6 +17,7 @@ export default function LocationPicker({ locationLatitude, locationLongitude, se
 
   useEffect(() => {
     setMounted(true)
+    setSearch(locationName)
     import("leaflet").then((leaflet) => setL(leaflet)) // Import Leaflet only on client
   }, [])
 
@@ -51,7 +52,7 @@ export default function LocationPicker({ locationLatitude, locationLongitude, se
   const handleSearch = async () => {
     if (!search.trim()) return
     try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(search)}`)
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&accept-language=en&q=${encodeURIComponent(search)}`)
       const data = await response.json()
       if (data.length > 0) {
         const { display_name, lat, lon } = data[0]
